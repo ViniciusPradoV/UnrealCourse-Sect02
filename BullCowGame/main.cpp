@@ -86,7 +86,7 @@ FText GetValidGuess()
 		std::cout << "Try " << CurrentTry << ".";
 		std::cout << "Make a guess !\n";
 		std::getline(std::cin, Guess);
-			GuessEvaluation = BCGame.CheckGuessValidity(Guess);
+		GuessEvaluation = BCGame.CheckGuessValidity(Guess);
 			switch (GuessEvaluation)
 			{
 			case EGuessStatus::Wrong_Length:
@@ -102,11 +102,11 @@ FText GetValidGuess()
 				break;
 
 			default:
-				return Guess;
 				break;
 			}
 		} while (GuessEvaluation != EGuessStatus::OK);
 
+		return Guess;
 }
 
 bool AskToPlayAgain()
