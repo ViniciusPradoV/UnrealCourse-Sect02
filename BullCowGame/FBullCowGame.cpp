@@ -1,4 +1,6 @@
 #include "FBullCowGame.h"
+#include <map>
+#define TMap std::map
 
 FBullCowGame::FBullCowGame()
 {
@@ -43,7 +45,6 @@ bool FBullCowGame::IsGameWon() const
 // checks wheter length of the guess matches the secret isogram and if the word inputed is an isogram
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess)
 {
-	FString GuessClone = Guess;							// Guess clone for character comparison
 
 	if (Guess.length() != GetHiddenWordLength())
 	{
@@ -51,24 +52,16 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess)
 		return EGuessStatus::Wrong_Length;
 	}
 
-	
-	for (int32 GClChar = 0; GClChar < GetHiddenWordLength(); GClChar++)
+	else if (!IsLowerCase(Guess))
 	{
-		for (int32 GChar = 0; GChar < GetHiddenWordLength(); GChar++)
-		{
-			if (GChar == GClChar)									// if positions are the same, ignore the comparison
-			{
-				continue;
-			}
-
-			else if (Guess[GChar] == GuessClone[GClChar])				// compare each guess letter with whole guess word, if letters repeat, guess is invalid
-			{
-				
-				return EGuessStatus::Not_Isogram;
-			}
-		}
-		
+		return EGuessStatus::Not_Lowercase;
 	}
+
+	else if (!IsIsogram(Guess))
+	{
+		return EGuessStatus::Not_Isogram;
+	}
+
 			
 	return EGuessStatus::OK;
 }
@@ -121,6 +114,40 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 		bIsGameWon = false;
 	}
 	return FBullCowCount;
+}
+
+bool FBullCowGame::IsIsogram(FString Guess) const
+{
+	TMap<char, bool> LetterSeen;		 // setup our map
+	for (auto Letter : Guess)			// for each letter in guess
+	{
+		Letter = tolower(Letter);		// converts upper case to lower case
+		// compare guess against map
+		if (LetterSeen[Letter]){		// if true, then we've already had the letter on the map, so it's repeated on the guess and it's not an isogram
+			return false;	
+		}
+		else{				// if not, add the letter to our map
+			LetterSeen[Letter] = true;	// add the letter
+		}
+	}
+		
+	return true;
+}
+
+bool FBullCowGame::IsLowerCase(FString Guess) const
+{
+	for (auto Letter : Guess)
+	{
+		if (islower(Letter))
+		{
+			continue;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 // Maybe implement it later

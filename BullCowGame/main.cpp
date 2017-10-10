@@ -93,13 +93,14 @@ FText GetValidGuess()
 				std::cout << "Your input is invalid! Word size does not match secret isogram size, please, try again!\n";
 				break;
 
+			case EGuessStatus::Not_Lowercase:
+				std::cout << "Your input is invalid! The word has uppercase letters, try typing your guess with lowercase letters only\n";
+				break;
+
 			case EGuessStatus::Not_Isogram:
 				std::cout << "Your input is invalid! The word is not an isogram! Try a word that doesn't have repeated letters\n";
 				break;
 
-			case EGuessStatus::Not_Lowercase:
-				std::cout << "Your input is invalid! The word has uppercase letters, try typing your guess with lowecase letters only\n";
-				break;
 
 			default:
 				break;
